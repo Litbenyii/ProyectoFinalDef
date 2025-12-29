@@ -1,9 +1,5 @@
 const { verifyToken } = require("../services/auth.service");
 
-/**
- * Middleware general de autenticación.
- * Lee el header Authorization: Bearer <token> y adjunta req.user
- */
 async function authMiddleware(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
@@ -30,7 +26,7 @@ async function authMiddleware(req, res, next) {
   }
 }
 
-/** Solo coordinación */
+//solo coordinador
 function requireCoordination(req, res, next) {
   if (!req.user) {
     return res.status(401).json({ message: "No autenticado" });
@@ -43,7 +39,7 @@ function requireCoordination(req, res, next) {
   next();
 }
 
-/** Solo estudiante */
+//solo estaudiante
 function requireStudent(req, res, next) {
   if (!req.user) {
     return res.status(401).json({ message: "No autenticado" });
