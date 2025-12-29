@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
@@ -98,7 +97,7 @@ async function main() {
     },
   });
 
-  // Solicitud de práctica externa
+  // Solicitud de practica externa
   await prisma.practiceRequest.create({
     data: {
       studentId: student.id,
