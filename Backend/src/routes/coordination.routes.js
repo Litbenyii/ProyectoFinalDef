@@ -22,7 +22,7 @@ const {
 
 const router = express.Router();
 
-// Todas las rutas requieren coordinación autenticada
+
 router.use(authMiddleware, requireCoordination);
 
 // Solicitudes externas

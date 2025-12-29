@@ -12,7 +12,7 @@ const {
 
 const router = express.Router();
 
-// Todas estas rutas requieren estudiante autenticado
+
 router.use(authMiddleware, requireStudent);
 
 router.get("/offers", getOffers);
