@@ -1,8 +1,6 @@
 const { prisma } = require("../config/prisma");
 
-/**
- * Ofertas visibles para estudiantes (solo activas)
- */
+//solo ofertas activas
 async function listActiveOffers() {
   return prisma.offer.findMany({
     where: { isActive: true },
@@ -10,18 +8,14 @@ async function listActiveOffers() {
   });
 }
 
-/**
- * Ofertas para coordinación (todas)
- */
+//lista de ofertas
 async function listAllOffers() {
   return prisma.offer.findMany({
     orderBy: { createdAt: "desc" },
   });
 }
 
-/**
- * Crear oferta de práctica (coordinación)
- */
+//crear oferta
 async function createOffer(data) {
   const {
     title,
@@ -51,9 +45,7 @@ async function createOffer(data) {
   return offer;
 }
 
-/**
- * Desactivar oferta (coordinación)
- */
+//desactivar oferta
 async function deactivateOffer(id) {
   return prisma.offer.update({
     where: { id },

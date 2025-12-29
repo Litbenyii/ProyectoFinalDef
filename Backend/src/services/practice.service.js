@@ -1,8 +1,6 @@
 const { prisma } = require("../config/prisma");
 
-/**
- * Crear solicitud de práctica externa (estudiante)
- */
+//crear solicitud prac externa
 async function createPracticeRequest(studentId, payload) {
   const {
     companyName,
@@ -29,9 +27,7 @@ async function createPracticeRequest(studentId, payload) {
   return req;
 }
 
-/**
- * Listar solicitudes de práctica externa (coordinación)
- */
+//practicas externas
 async function getCoordinatorPracticeRequests() {
   return prisma.practiceRequest.findMany({
     include: {
@@ -43,9 +39,7 @@ async function getCoordinatorPracticeRequests() {
   });
 }
 
-/**
- * Actualizar estado de solicitud externa
- */
+//actualizar estado de solicitudes
 async function updatePracticeRequestStatus(id, status) {
   return prisma.practiceRequest.update({
     where: { id },
@@ -53,9 +47,7 @@ async function updatePracticeRequestStatus(id, status) {
   });
 }
 
-/**
- * Lista prácticas abiertas (para asignar evaluador)
- */
+//lista de practicas abiertas
 async function getOpenPractices() {
   return prisma.practice.findMany({
     where: { status: "OPEN" },
@@ -68,18 +60,14 @@ async function getOpenPractices() {
   });
 }
 
-/**
- * Lista directorio de evaluadores
- */
+//lista de evaluadores
 async function getEvaluators() {
   return prisma.evaluator.findMany({
     orderBy: { name: "asc" },
   });
 }
 
-/**
- * Asigna evaluador a una práctica
- */
+//asignar evaluador de practica
 async function assignEvaluatorToPractice(practiceId, evaluatorId) {
   return prisma.practice.update({
     where: { id: practiceId },
@@ -95,9 +83,7 @@ async function assignEvaluatorToPractice(practiceId, evaluatorId) {
   });
 }
 
-/**
- * Cierra una práctica (status = CLOSED)
- */
+//cerrar practica
 async function closePractice(practiceId) {
   return prisma.practice.update({
     where: { id: practiceId },
