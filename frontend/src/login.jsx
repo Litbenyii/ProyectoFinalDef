@@ -20,7 +20,6 @@ export default function Login({ onLogin }) {
       setLoading(true);
       const data = await login(email, password);
 
-      // data: { token, user }
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
