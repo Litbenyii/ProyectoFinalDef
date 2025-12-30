@@ -1,43 +1,29 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
-const config = require("./config/env");
-
-const authRoutes = require("./routes/auth.routes");
-const studentRoutes = require("./routes/student.routes");
-const coordinationRoutes = require("./routes/coordination.routes");
+const path = require("path");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: true, // permite localhost:5173 y otros en dev
-    credentials: true,
-  })
-);
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({ message: "API de prácticas UBB funcionando" });
+// 1. TUS RUTAS DE API
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/student", require("./routes/student.routes"));
+app.use("/api/coord", require("./routes/coordination.routes"));
+
+// 2. SERVIR FRONTEND (Para que se levanten ambos)
+const frontendPath = path.join(__dirname, "../../frontend/dist");
+app.use(express.static(frontendPath));
+
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/student", studentRoutes);
-app.use("/api/coord", coordinationRoutes);
-
-// 404
-app.use((req, res) => {
-  res.status(404).json({ message: "Ruta no encontrada" });
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-  console.error("Error no controlado:", err);
-  res
-    .status(err.status || 500)
-    .json({ message: err.message || "Error interno del servidor" });
-});
-
-app.listen(config.PORT, () => {
-  console.log(`✅ Backend escuchando en http://localhost:${config.PORT}`);
+// 3. PUERTO FIJO 1510 (El 80 es de GitLab)
+const PORT = 1510;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Servidor Unificado en puerto ${PORT}`);
 });
