@@ -381,6 +381,12 @@ function TabButton({ label, active, onClick }) {
   );
 }
 
+const STATUS_LABELS = {
+  PEND_EVAL: "Pendiente a evaluación",
+  APPROVED: "Aprobada",
+  REJECTED: "Rechazada",
+};
+
 function SectionExternalRequests({ items, onDecision }) {
   return (
     <section className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
@@ -408,8 +414,8 @@ function SectionExternalRequests({ items, onDecision }) {
                     {req.company || "Empresa sin nombre"}
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Estudiante: {req.studentName || "N/D"}
-                    {req.studentEmail && ` · ${req.studentEmail}`}
+                    Estudiante: {req.student?.user?.fullName || "N/D"}
+                    {req.student?.user?.email && ` · ${req.student.user.email}`}
                   </p>
                   <p className="text-xs text-slate-500">
                     Tutor: {req.tutorName || "N/D"}
@@ -425,7 +431,7 @@ function SectionExternalRequests({ items, onDecision }) {
                       : "bg-amber-50 text-amber-700"
                   }`}
                 >
-                  {req.status || "PEND_EVAL"}
+                  {STATUS_LABELS[req.status] || "Pendiente a evaluación"}
                 </span>
               </div>
 
@@ -475,6 +481,7 @@ function SectionOffers({
   onCreate,
   onDeactivate,
 }) {
+  
   return (
     <section className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
       {/* Ofertas publicadas */}
@@ -710,27 +717,35 @@ function SectionApplications({ applications, onDecision }) {
                 <th className="text-right py-2 px-3 font-medium">Acciones</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-slate-100">
               {applications.map((app) => (
                 <tr key={app.id}>
+                  {/* ESTUDIANTE */}
                   <td className="py-2 px-3">
                     <div className="text-xs font-medium text-slate-900">
-                      {app.studentName || "N/D"}
+                      {app.student?.user?.fullName || "N/D"}
                     </div>
-                    {app.studentEmail && (
+                    {app.student?.user?.email && (
                       <div className="text-[11px] text-slate-500">
-                        {app.studentEmail}
+                        {app.student.user.email}
                       </div>
                     )}
                   </td>
+
+                  {/* OFERTA */}
                   <td className="py-2 px-3">
                     <div className="text-xs font-medium text-slate-900">
-                      {app.offerTitle || "N/D"}
+                      {app.offer?.title || "N/D"}
                     </div>
                   </td>
+
+                  {/* EMPRESA */}
                   <td className="py-2 px-3 text-xs text-slate-600">
-                    {app.company || "N/D"}
+                    {app.offer?.company || "N/D"}
                   </td>
+
+                  {/* ESTADO */}
                   <td className="py-2 px-3">
                     <span
                       className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] ${
@@ -741,9 +756,11 @@ function SectionApplications({ applications, onDecision }) {
                           : "bg-amber-50 text-amber-700"
                       }`}
                     >
-                      {app.status || "PEND_EVAL"}
+                      {STATUS_LABELS[app.status] || "Pendiente a evaluación"}
                     </span>
                   </td>
+
+                  {/* ACCIONES */}
                   <td className="py-2 px-3">
                     {app.status === "PEND_EVAL" && (
                       <div className="flex justify-end gap-2">

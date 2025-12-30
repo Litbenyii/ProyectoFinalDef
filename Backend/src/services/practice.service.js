@@ -5,7 +5,7 @@ const { prisma } = require("../config/prisma");
  */
 async function createPracticeRequest(studentId, payload) {
   const {
-    companyName,
+    company,
     tutorName,
     tutorEmail,
     startDate,
@@ -16,7 +16,7 @@ async function createPracticeRequest(studentId, payload) {
   const req = await prisma.practiceRequest.create({
     data: {
       studentId,
-      companyName,
+      companyName: company,
       tutorName,
       tutorEmail,
       startDate: new Date(startDate),

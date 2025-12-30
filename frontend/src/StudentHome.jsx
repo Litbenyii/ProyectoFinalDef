@@ -36,7 +36,29 @@ export default function StudentHome({ name, onLogout, token }) {
       ]);
 
       setOffers(Array.isArray(offersData) ? offersData : []);
-      setRequests(Array.isArray(requestsData) ? requestsData : []);
+
+      const allRequests = [
+        ...(requestsData.applications || []).map((a) => ({
+          id: a.id,
+          type: "INTERNAL",
+          offerTitle: a.offer?.title,
+          company: a.offer?.company,
+          startDate: a.offer?.startDate,
+          endDate: a.offer?.deadline,
+          status: a.status,
+        })),
+        ...(requestsData.practices || []).map((p) => ({
+          id: p.id,
+          type: "EXTERNAL",
+          company: p.companyName,
+          startDate: p.startDate,
+          endDate: p.endDate,
+          status: p.status,
+        })),
+      ];
+
+      setRequests(allRequests);
+
     } catch (err) {
       setError(err.message || "Error al cargar datos");
     } finally {
@@ -99,6 +121,16 @@ export default function StudentHome({ name, onLogout, token }) {
       setApplyingId(null);
     }
   };
+  
+  const appliedOfferIds = requests
+  .filter((r) => r.type === "INTERNAL")
+  .map((r) => r.offerTitle);
+
+  const STATUS_LABELS = {
+    PEND_EVAL: "Pendiente a evaluación",
+    APPROVED: "Aprobada",
+    REJECTED: "Rechazada",
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -133,26 +165,29 @@ export default function StudentHome({ name, onLogout, token }) {
           </div>
         )}
 
-        {/* Ofertas + práctica externa */}
-        <section className="grid gap-6 lg:grid-cols-2">
-          {/* Ofertas internas */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
-            <h2 className="text-base font-semibold text-slate-900 mb-1">
-              Ofertas de práctica internas
-            </h2>
-            <p className="text-xs text-slate-500 mb-4">
-              Postula a las ofertas oficiales publicadas por la coordinación.
-            </p>
+      {/* Ofertas + práctica externa */}
+      <section className="grid gap-6 lg:grid-cols-2">
+        {/* Ofertas internas */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+          <h2 className="text-base font-semibold text-slate-900 mb-1">
+            Ofertas de práctica internas
+          </h2>
+          <p className="text-xs text-slate-500 mb-4">
+            Postula a las ofertas oficiales publicadas por la coordinación.
+          </p>
 
-            {loading ? (
-              <p className="text-sm text-slate-500">Cargando ofertas...</p>
-            ) : offers.length === 0 ? (
-              <p className="text-sm text-slate-500">
-                No hay ofertas disponibles por ahora.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {offers.map((offer) => (
+          {loading ? (
+            <p className="text-sm text-slate-500">Cargando ofertas...</p>
+          ) : offers.length === 0 ? (
+            <p className="text-sm text-slate-500">
+              No hay ofertas disponibles por ahora.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {offers.map((offer) => {
+                const alreadyApplied = appliedOfferIds.includes(offer.title);
+
+                return (
                   <div
                     key={offer.id}
                     className="border border-slate-100 rounded-xl p-4 flex flex-col gap-2 bg-slate-50/40"
@@ -195,17 +230,26 @@ export default function StudentHome({ name, onLogout, token }) {
                     <div className="pt-1 flex justify-end">
                       <button
                         onClick={() => handleApplyOffer(offer.id)}
-                        disabled={applyingId === offer.id}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-white hover:bg-slate-800"
+                        disabled={alreadyApplied || applyingId === offer.id}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium ${
+                          alreadyApplied
+                            ? "bg-slate-300 text-slate-600 cursor-not-allowed"
+                            : "bg-slate-900 text-white hover:bg-slate-800"
+                        }`}
                       >
-                        {applyingId === offer.id ? "Enviando..." : "Postular"}
+                        {alreadyApplied
+                          ? "Ya postulaste"
+                          : applyingId === offer.id
+                          ? "Enviando..."
+                          : "Postular"}
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
           {/* Práctica externa */}
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
@@ -350,7 +394,7 @@ export default function StudentHome({ name, onLogout, token }) {
                       </td>
                       <td className="py-2 px-3">
                         <div className="text-xs font-medium text-slate-900">
-                          {r.offerTitle || r.company || "Sin nombre"}
+                          {r.offerTitle ?? r.company ?? "Práctica externa"}
                         </div>
                         {r.company && r.offerTitle && (
                           <div className="text-[11px] text-slate-500">
@@ -377,7 +421,7 @@ export default function StudentHome({ name, onLogout, token }) {
                               : "bg-amber-50 text-amber-700"
                           }`}
                         >
-                          {r.status || "PEND_EVAL"}
+                          {STATUS_LABELS[r.status] || r.status}
                         </span>
                       </td>
                     </tr>
