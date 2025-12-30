@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const { prisma } = require("../config/prisma");
 const config = require("../config/env");
 
+/**
+ * Login: valida email/password y devuelve token + datos del usuario
+ */
 async function login(email, password) {
   const user = await prisma.user.findUnique({
     where: { email },
@@ -47,6 +50,9 @@ async function login(email, password) {
   return { token, user: baseUser };
 }
 
+/**
+ * Verifica y decodifica JWT
+ */
 function verifyToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, config.JWT_SECRET, (err, decoded) => {

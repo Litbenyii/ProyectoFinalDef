@@ -20,6 +20,7 @@ export default function Login({ onLogin }) {
       setLoading(true);
       const data = await login(email, password);
 
+      // data: { token, user }
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -51,7 +52,7 @@ export default function Login({ onLogin }) {
               className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/70"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="usuario@uni.cl"
+              placeholder="usuario@alumnos.ubb.cl"
             />
           </div>
 

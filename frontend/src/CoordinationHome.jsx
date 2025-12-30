@@ -363,7 +363,7 @@ export default function CoordinationHome({ name, onLogout, token }) {
   );
 }
 
-// Componentes auxiliares
+/* ===== Components auxiliares ===== */
 
 function TabButton({ label, active, onClick }) {
   return (

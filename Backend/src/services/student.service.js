@@ -1,6 +1,8 @@
 const { prisma } = require("../config/prisma");
 
-//crear estudiante
+/**
+ * Crea estudiante desde coordinación
+ */
 async function createStudent(data) {
   const { fullName, rut, email, career } = data;
 
@@ -29,7 +31,9 @@ async function createStudent(data) {
   return { user, student, initialPassword: password };
 }
 
-//obtener estudiante
+/**
+ * Obtiene el estudiante asociado a un userId
+ */
 async function getStudentByUserId(userId) {
   const student = await prisma.student.findFirst({
     where: { userId },

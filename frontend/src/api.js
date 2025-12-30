@@ -1,5 +1,9 @@
 const API_URL = "http://localhost:4000";
 
+/* =====================================================
+   HELPER CENTRAL
+===================================================== */
+
 async function request(path, options = {}) {
   const { headers, ...rest } = options;
 
@@ -19,7 +23,7 @@ async function request(path, options = {}) {
       data = await res.json();
       msg = data.message || data.error || msg;
     } catch (e) {
-
+      // ignoramos parse error
     }
 
     // Sesión expirada
@@ -45,7 +49,9 @@ async function request(path, options = {}) {
   return res.json();
 }
 
-//auth
+/* =====================================================
+   AUTH
+===================================================== */
 
 export async function login(email, password) {
   return request("/api/auth/login", {
@@ -54,7 +60,9 @@ export async function login(email, password) {
   });
 }
 
-//estudiante: ofertas y solicitudes
+/* =====================================================
+   ESTUDIANTE
+===================================================== */
 
 export async function getOffers(token) {
   return request("/api/student/offers", {
@@ -83,7 +91,9 @@ export async function createApplication(token, offerId) {
   });
 }
 
-//coordinacion: solicitudes externas
+/* =====================================================
+   COORDINACIÓN – SOLICITUDES EXTERNAS
+===================================================== */
 
 export async function getCoordinatorPracticeRequests(token) {
   return request("/api/coord/external-requests", {
@@ -105,7 +115,9 @@ export async function rejectPracticeRequest(token, id) {
   });
 }
 
-//coordinacion: ofertas de practica
+/* =====================================================
+   COORDINACIÓN – OFERTAS
+===================================================== */
 
 export async function createOffer(token, payload) {
   return request("/api/coord/offers", {
@@ -137,7 +149,10 @@ export async function deactivateOffer(token, id) {
   });
 }
 
-// coordinacion: postulaciones
+/* =====================================================
+   COORDINACIÓN – POSTULACIONES
+===================================================== */
+
 export async function getCoordinatorApplications(token) {
   return request("/api/coord/applications", {
     headers: { Authorization: `Bearer ${token}` },
@@ -158,7 +173,10 @@ export async function rejectApplication(token, id) {
   });
 }
 
-// coordinacion: crear estudiante
+/* =====================================================
+   COORDINACIÓN – ESTUDIANTES
+===================================================== */
+
 export async function createStudent(token, payload) {
   return request("/api/coord/students", {
     method: "POST",
@@ -167,7 +185,10 @@ export async function createStudent(token, payload) {
   });
 }
 
-//coordinacion: evaluadores y prácticas
+/* =====================================================
+   COORDINACIÓN – PRÁCTICAS Y EVALUADORES
+===================================================== */
+
 export async function getEvaluators(token) {
   return request("/api/coord/evaluators", {
     headers: { Authorization: `Bearer ${token}` },

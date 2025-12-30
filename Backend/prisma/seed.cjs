@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Iniciando seed de base de datos...");
+  console.log("🌱 Iniciando seed de base de datos...");
 
   // Borrar todo en orden de dependencias
   await prisma.application.deleteMany();
@@ -97,7 +98,7 @@ async function main() {
     },
   });
 
-  // Solicitud de practica externa
+  // Solicitud de práctica externa
   await prisma.practiceRequest.create({
     data: {
       studentId: student.id,
@@ -125,7 +126,7 @@ async function main() {
     },
   });
 
-  console.log("Seed completado:");
+  console.log("✅ Seed completado:");
   console.log("- Usuario coordinación:", coordUser.email, "/ clave: Admin123");
   console.log("- Usuario estudiante:", studentUser.email, "/ clave: 123456");
 }

@@ -22,7 +22,9 @@ const {
   createStudent,
 } = require("../services/student.service");
 
-//lista de solicitudes externas
+/**
+ * Solicitudes externas (GET)
+ */
 async function listExternalRequests(req, res) {
   try {
     const requests = await getCoordinatorPracticeRequests();
@@ -35,7 +37,9 @@ async function listExternalRequests(req, res) {
   }
 }
 
-//Aprobar solicitud externa
+/**
+ * Aprobar solicitud externa
+ */
 async function approvePracticeRequestController(req, res) {
   try {
     const id = Number(req.params.id);
@@ -52,7 +56,9 @@ async function approvePracticeRequestController(req, res) {
   }
 }
 
-//Rechazar solicitud externa
+/**
+ * Rechazar solicitud externa
+ */
 async function rejectPracticeRequestController(req, res) {
   try {
     const id = Number(req.params.id);
@@ -69,7 +75,9 @@ async function rejectPracticeRequestController(req, res) {
   }
 }
 
-//ofertas de practica
+/**
+ * Ofertas
+ */
 async function listOffersController(req, res) {
   try {
     const offers = await listAllOffers();
@@ -104,7 +112,9 @@ async function deactivateOfferController(req, res) {
   }
 }
 
-//postulaciones
+/**
+ * Postulaciones
+ */
 async function listApplicationsController(req, res) {
   try {
     const apps = await getCoordinatorApplications();
@@ -149,7 +159,9 @@ async function rejectApplicationController(req, res) {
   }
 }
 
-//registrar estudiante
+/**
+ * Registrar estudiante
+ */
 async function createStudentController(req, res) {
   try {
     const { fullName, rut, email, career } = req.body;
@@ -168,7 +180,9 @@ async function createStudentController(req, res) {
   }
 }
 
-//evaluadores de practica
+/**
+ * Evaluadores / Prácticas
+ */
 async function listEvaluatorsController(req, res) {
   try {
     const evaluators = await getEvaluators();

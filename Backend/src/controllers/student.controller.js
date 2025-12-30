@@ -8,7 +8,10 @@ const {
   createPracticeRequest,
 } = require("../services/practice.service");
 
-//lista de oferta activas
+/**
+ * GET /api/student/offers
+ * Lista ofertas activas para estudiantes
+ */
 async function getOffers(req, res) {
   try {
     const offers = await prisma.offer.findMany({
@@ -23,7 +26,10 @@ async function getOffers(req, res) {
   }
 }
 
-// postulacione y solicitudes externas
+/**
+ * GET /api/student/my/requests
+ * Devuelve postulaciones + solicitudes externas del estudiante logueado
+ */
 async function getMyRequestsController(req, res) {
   try {
     const student = await getStudentByUserId(req.user.id);
@@ -41,7 +47,10 @@ async function getMyRequestsController(req, res) {
   }
 }
 
-//crear solicitud de practica externa
+/**
+ * POST /api/student/practice-requests
+ * Crea solicitud de práctica externa
+ */
 async function createPracticeRequestController(req, res) {
   try {
     const student = await getStudentByUserId(req.user.id);
@@ -59,7 +68,10 @@ async function createPracticeRequestController(req, res) {
   }
 }
 
-//postula a una oferta
+/**
+ * POST /api/student/applications/:offerId
+ * Postular a una oferta
+ */
 async function createApplicationController(req, res) {
   try {
     const offerId = Number(req.params.offerId);

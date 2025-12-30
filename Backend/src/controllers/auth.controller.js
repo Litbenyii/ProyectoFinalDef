@@ -1,5 +1,8 @@
 const { login } = require("../services/auth.service");
 
+/**
+ * POST /api/auth/login
+ */
 async function loginController(req, res) {
   try {
     const { email, password } = req.body;

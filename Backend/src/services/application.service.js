@@ -1,8 +1,10 @@
 const { prisma } = require("../config/prisma");
 
-// postuacion a ofeerta una vez
+/**
+ * Crea postulación de un estudiante a una oferta
+ */
 async function createApplication(studentId, offerId) {
-
+  // Evitar duplicados
   const existing = await prisma.application.findFirst({
     where: { studentId, offerId },
   });
@@ -28,7 +30,11 @@ async function createApplication(studentId, offerId) {
   return app;
 }
 
-//solicitudes y postulaciones
+/**
+ * Devuelve las solicitudes del estudiante:
+ *  - postulaciones internas a ofertas
+ *  - solicitudes de prácticas externas
+ */
 async function getMyRequests(studentId) {
   const applications = await prisma.application.findMany({
     where: { studentId },
@@ -47,7 +53,9 @@ async function getMyRequests(studentId) {
   };
 }
 
-//lista de postulaciones
+/**
+ * Lista postulaciones para coordinación
+ */
 async function getCoordinatorApplications() {
   return prisma.application.findMany({
     include: {
@@ -60,7 +68,9 @@ async function getCoordinatorApplications() {
   });
 }
 
-//estado de postulacion
+/**
+ * Cambia estado de postulación (APPROVED / REJECTED)
+ */
 async function updateApplicationStatus(id, status) {
   const app = await prisma.application.update({
     where: { id },

@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: true, // permite localhost:5173 y otros en dev
     credentials: true,
   })
 );
