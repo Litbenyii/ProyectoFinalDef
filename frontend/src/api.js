@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:1510"
+const API_URL = ""
 
 /* =====================================================
    HELPER CENTRAL
